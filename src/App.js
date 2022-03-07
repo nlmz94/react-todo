@@ -4,20 +4,24 @@ import ToDoList from "./ToDoList";
 import {BrowserRouter as Router, Link, Route, Routes} from "react-router-dom";
 
 function App() {
-	const [newToDo, setNewToDo] = useState('');
-	const [toDoList, setToDoList] = useState(['task1', 'task2', 'task3']);
+	const [newToDo, setNewToDo] = useState({id: 0, task: ''});
+	const [toDoList, setToDoList] = useState([
+		{id: 1, task: 'task1'},
+		{id: 2, task: 'task2'},
+		{id: 3, task: 'task3'}
+	]);
 	useEffect(() => {
 		localStorage.setItem("toDoList", JSON.stringify(toDoList));
 	}, [toDoList]);
 
 	function onChange(event) {
-		setNewToDo(event.target.value);
+		setNewToDo({id: toDoList.length + 1, task: event.target.value});
 	}
 
 	function onSubmit() {
 		if (newToDo.length !== 0) {
 			setToDoList([...toDoList, newToDo]);
-			setNewToDo('');
+			setNewToDo({id: 0, task: ''});
 		}
 	}
 
@@ -54,7 +58,7 @@ function App() {
 				<h3>Add a task to your TODO List</h3>
 				<ToDoList toDoList={toDoList}/>
 				<label htmlFor="new-todo">What needs to be done?</label>
-				<input id="new-todo" onChange={onChange} value={newToDo}/>
+				<input id="new-todo" onChange={onChange} value={newToDo.task}/>
 				<button onClick={onSubmit}>Add task number {toDoList.length + 1}</button>
 			</div>);
 	}
